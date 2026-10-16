@@ -392,6 +392,10 @@ def fig_uq():
     return svg("dg-uq", "A predictive interval widening to the right around a mean, with scattered observations", body)
 
 # ------------------------------------------------------------------ build
+import os, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from figs_story import fig_uq, fig_llm, fig_agent, fig_cv, fig_arm, fig_mat, fig_shm  # story versions
+
 METHODS = [
     (fig_pinn, "Physics-informed learning",
      "Putting the governing equation in the loss. Physics-informed networks and neural "

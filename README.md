@@ -12,7 +12,8 @@ pubs.js        publication data + journal/conference split + filtering
 diagrams.js    plays the research figures only while they are on screen
 field.js       hero canvas (plate-mode isolines, marching squares)
 assets/        portrait, favicon, Zalo QR
-tools/figs.py  regenerates the eight research figures
+tools/figs.py        regenerates the eight research figures
+tools/figs_story.py  the story figures (GP, LLM, agent, vision, arm, grains, SHM)
 ```
 
 Page order: hero → research interests → applied work → toolkit → publications →

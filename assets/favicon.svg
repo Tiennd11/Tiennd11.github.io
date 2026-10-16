@@ -1,8 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#0E1B26"/>
-  <g fill="none" stroke-linecap="round">
-    <path d="M3 21c4.5-11 9.5-11 14 0s9.5 11 14 0" stroke="#56B4E9" stroke-width="2.4"/>
-    <path d="M3 14.5c4.5-11 9.5-11 14 0s9.5 11 14 0" stroke="#0072B2" stroke-width="2.2" opacity=".6"/>
-    <path d="M3 27.5c4.5-11 9.5-11 14 0" stroke="#D55E00" stroke-width="2.2" opacity=".75"/>
+  <!-- TN monogram on an ink tile; the blue node is the agent in the loop -->
+  <rect width="32" height="32" rx="7" fill="#0E1B26"/>
+  <g fill="#FFFFFF">
+    <rect x="4.5" y="8" width="11" height="3.2" rx=".6"/>
+    <rect x="8.4" y="8" width="3.2" height="16" rx=".6"/>
+    <rect x="17" y="8" width="3.2" height="16" rx=".6"/>
+    <rect x="23.8" y="8" width="3.2" height="16" rx=".6"/>
+    <polygon points="17,8 20.4,8 27,24 23.6,24"/>
   </g>
+  <circle cx="26.2" cy="26.6" r="2.6" fill="#56B4E9"/>
 </svg>

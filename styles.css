@@ -187,9 +187,10 @@ img { max-width: 100%; display: block; }
 
 h1 {
   margin: 0 0 var(--s8);
-  font-size: clamp(3rem, 9vw, 7rem);
+  font-size: clamp(2.5rem, 5.6vw, 4.5rem);
   font-weight: 700;
-  line-height: 0.88;
+  line-height: 1;
+  white-space: nowrap;
   letter-spacing: -0.042em;
   font-variation-settings: "wdth" 108;
 }
@@ -325,42 +326,45 @@ h2 {
 .dg-tint   { fill: var(--blue); fill-opacity: .13; stroke: none; }
 .dg-tint-2 { fill: var(--blue); fill-opacity: .06; stroke: none; }
 
-/* language models: a causal attention map, row by row ----------- */
-.dg-llm .row { fill: none; stroke: var(--vermilion); stroke-width: 2.2; }
-.run .dg-llm .row { animation: queryrow 6s steps(1, end) infinite; }
-@keyframes queryrow {
-  0%      { transform: translateY(0); }
-  16.6%   { transform: translateY(16px); }
-  33.3%   { transform: translateY(32px); }
-  50%     { transform: translateY(48px); }
-  66.6%   { transform: translateY(64px); }
-  83.3%   { transform: translateY(80px); }
-}
+/* Every figure below runs on one SMIL timeline (see tools/figs_story.py);
+   the CSS only paints. Blue is the model, vermilion is error, attention
+   or damage, dashed ink is ground truth. */
 
-/* agent: a token circulating the plan–run–observe–revise loop ---- */
-.dg-agent .dg-loop  { fill: none; stroke: var(--ink-2); stroke-width: 1.8; }
-.dg-agent .dg-node  { fill: var(--blue); fill-opacity: .14; stroke: var(--ink); stroke-width: 1.5; }
-.dg-agent .dg-glyph { fill: none; stroke: var(--ink); stroke-width: 1.5;
-                      stroke-linecap: round; stroke-linejoin: round; }
-.dg-agent .orbit { transform-box: view-box; transform-origin: 110px 70px; }
-.run .dg-agent .orbit { animation: orbit 7s linear infinite; }
-@keyframes orbit { to { transform: rotate(360deg); } }
+/* uncertainty: a Gaussian process tightening as data arrives ---- */
+.dg-uq .uq-true { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 4 3; opacity: .55; }
+.dg-uq .uq-band { fill: var(--blue); fill-opacity: .16; stroke: var(--blue); stroke-opacity: .35; stroke-width: .8; }
+.dg-uq .uq-mean { fill: none; stroke: var(--blue); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.dg-uq .uq-obs  { fill: var(--vermilion); stroke: var(--panel); stroke-width: 1.6; }
 
-/* vision: a scan crosses the frame, then the detection locks ----- */
+/* language model: tokens emitted one by one, attending back ----- */
+.dg-llm .llm-chip.llm-prompt { fill: var(--ink); fill-opacity: .10; stroke: var(--ink-3); stroke-opacity: .5; stroke-width: 1; }
+.dg-llm .llm-chip.llm-gen    { fill: var(--blue); stroke: none; }
+.dg-llm .llm-ink.llm-prompt  { fill: var(--ink-3); }
+.dg-llm .llm-ink.llm-gen     { fill: var(--panel); }
+.dg-llm .llm-arc     { fill: none; stroke: var(--blue); stroke-linecap: round; }
+.dg-llm .llm-arc.top { stroke: var(--vermilion); }
+
+/* agent: a comet circling plan, run, observe, revise ------------ */
+.dg-agent .agent-track { fill: none; stroke: var(--rule); stroke-width: 2; }
+.dg-agent .agent-inner { fill: var(--blue); fill-opacity: .05; stroke: var(--rule-2); stroke-width: 1; stroke-dasharray: 2 3; }
+.dg-agent .agent-comet { fill: none; stroke: var(--blue); stroke-linecap: round; }
+.dg-agent .agent-glow  { fill: var(--blue); }
+.dg-agent .agent-node  { fill: var(--panel); stroke: var(--ink); stroke-width: 1.6; }
+.dg-agent .agent-glyph { fill: none; stroke: var(--ink); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.dg-agent .agent-solid { fill: var(--ink); stroke: none; }
+.dg-agent .agent-head  { fill: var(--blue); stroke: var(--panel); stroke-width: 1.8; }
+
+/* vision: a scan passes and each object gets a labelled box ----- */
 .dg-cv { color: var(--blue); }
-.dg-cv .dg-scene    { fill: var(--ink); fill-opacity: .17; stroke: none; }
-.dg-cv .dg-ghostbox { fill: none; stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
-.dg-cv .scan { transform: translateY(14px); }
-.dg-cv .det  { opacity: 0; }
-.run .dg-cv .scan { animation: scanline 5.4s ease-in-out infinite; }
-.run .dg-cv .det  { animation: lock 5.4s steps(1, end) infinite; }
-.run .dg-cv .d2   { animation-delay: 1.8s; }
-.run .dg-cv .d3   { animation-delay: 3.6s; }
-@keyframes scanline {
-  0%, 100% { transform: translateY(8px); }
-  50%      { transform: translateY(112px); }
-}
-@keyframes lock { 0% { opacity: 1; } 33.3%, 100% { opacity: 0; } }
+.dg-cv .cv-sky     { fill: var(--blue); fill-opacity: .05; }
+.dg-cv .cv-ground  { fill: var(--ink); fill-opacity: .07; }
+.dg-cv .cv-horizon { fill: none; stroke: var(--rule); stroke-width: 1; }
+.dg-cv .cv-obj     { fill: var(--ink); fill-opacity: .62; }
+.dg-cv .cv-glass   { fill: var(--panel); fill-opacity: .7; }
+.dg-cv .cv-frame   { fill: none; stroke: var(--ink); stroke-width: 1.4; }
+.dg-cv .cv-box     { fill: none; stroke: var(--blue); stroke-width: 1.8; }
+.dg-cv .cv-tab     { fill: var(--blue); }
+.dg-cv .cv-conf    { fill: var(--panel); }
 
 /* PINN: the prediction converges on the exact solution --------- */
 /* SMIL drives every moving part on one timeline; style only here */
@@ -373,67 +377,32 @@ h2 {
 .dg-pinn .pinn-dot   { fill: var(--blue); stroke: var(--panel); stroke-width: 1.6; }
 .dg-pinn .pinn-bar   { fill: var(--vermilion); }
 
-/* arm: SMIL rotates each link about its own joint; style only --- */
-.dg-arm .dg-ghostline {
-  fill: none; stroke: var(--rule); stroke-width: 2.2;
-  stroke-linejoin: round; stroke-linecap: round;
-}
-.dg-arm .dg-body {
-  fill: var(--blue); fill-opacity: .16;
-  stroke: var(--ink); stroke-width: 1.7;
-}
-.dg-arm .dg-joint { fill: var(--panel); stroke: var(--ink); stroke-width: 1.7; }
-.dg-arm .dg-pin   { fill: var(--ink); stroke: none; }
-.dg-arm .dg-grip  {
-  fill: none; stroke: var(--ink); stroke-width: 1.9;
-  stroke-linecap: round; stroke-linejoin: round;
-}
+/* robot: an arm writing a word, stroke by stroke ---------------- */
+.dg-arm .arm-guide { fill: none; stroke: var(--rule); stroke-width: 1; stroke-dasharray: 2 3; }
+.dg-arm .arm-ink   { fill: none; stroke: var(--blue); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.dg-arm .arm-body  { fill: var(--blue); fill-opacity: .16; stroke: var(--ink); stroke-width: 1.6; }
+.dg-arm .arm-joint { fill: var(--panel); stroke: var(--ink); stroke-width: 1.6; }
+.dg-arm .arm-pin   { fill: var(--ink); }
+.dg-arm .arm-pen   { fill: var(--ink); }
+.dg-arm .arm-base  { fill: var(--ink); }
+.dg-arm .arm-hatch { fill: none; stroke: var(--ink-3); stroke-width: 1.2; }
 
-/* materials: a scan lights each grain as it passes -------------- */
-.dg-mat .grains use { fill: var(--blue); stroke: var(--ink); stroke-width: .9; stroke-opacity: .28; }
-.run .dg-mat .grains use {
-  animation: grain 3.6s ease-in-out infinite;
-  animation-delay: var(--d);
-}
-@keyframes grain {
-  0%, 100% { fill-opacity: var(--o); }
-  14%      { fill-opacity: calc(var(--o) + .34); }
-}
+/* materials: a crack runs along the grain boundaries ------------ */
+.dg-mat .mat-grain { fill: var(--blue); stroke: var(--panel); stroke-width: 1.6; stroke-linejoin: round; }
+.dg-mat .mat-crack { fill: none; stroke: var(--vermilion); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.dg-mat .mat-tip   { fill: var(--vermilion); stroke: var(--panel); stroke-width: 1.6; }
 
-.dg-mat .sweep { stroke: var(--blue); stroke-width: 2; opacity: 0; }
-.run .dg-mat .sweep { animation: sweep 3.6s linear infinite; }
-@keyframes sweep {
-  0%   { transform: translateX(6px);   opacity: 0; }
-  8%   { opacity: .9; }
-  92%  { opacity: .9; }
-  100% { transform: translateX(214px); opacity: 0; }
-}
-
-/* SHM: the first mode oscillates, damage shows up --------------- */
-.dg-shm .mode {
-  fill: none; stroke: var(--blue); stroke-width: 2.2;
-  transform-box: view-box; transform-origin: 110px 78px;
-}
-.run .dg-shm .mode { animation: vibrate 2.6s ease-in-out infinite; }
-@keyframes vibrate { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(-1); } }
-
-.dg-shm .crack { fill: none; stroke: var(--vermilion); stroke-width: 2.2;
-                 stroke-linecap: round; opacity: 0; }
-.dg-shm .crack circle { stroke-width: 1.3; stroke-dasharray: 3 3; }
-.run .dg-shm .crack { animation: damage 5.2s ease-in-out infinite; }
-@keyframes damage { 0%, 42% { opacity: 0; } 54%, 88% { opacity: 1; } 100% { opacity: 0; } }
-
-/* UQ: the predictive interval breathes, wider to the right ------ */
-.dg-uq .band { stroke: none; transform-box: view-box; transform-origin: 110px 70px; }
-.dg-uq .b1 { fill: var(--blue); fill-opacity: .22; }
-.dg-uq .b2 { fill: var(--blue); fill-opacity: .09; }
-.dg-uq .obs circle { fill: var(--blue); stroke: var(--panel); stroke-width: 1.6; }
-.run .dg-uq .b1 { animation: breathe 4.4s ease-in-out infinite; }
-.run .dg-uq .b2 { animation: breathe 4.4s ease-in-out infinite; animation-delay: .35s; }
-@keyframes breathe {
-  0%, 100% { transform: scaleY(.76); }
-  50%      { transform: scaleY(1.12); }
-}
+/* SHM: a beam vibrates, cracks, and its peak shifts left -------- */
+.dg-shm .shm-beam    { fill: none; stroke: var(--ink); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.dg-shm .shm-support { fill: var(--ink); }
+.dg-shm .shm-sensor  { fill: var(--blue); }
+.dg-shm .shm-crack   { fill: none; stroke: var(--vermilion); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.dg-shm .shm-ring    { fill: none; stroke: var(--vermilion); stroke-width: 1.2; stroke-dasharray: 2.5 2.5; }
+.dg-shm .shm-axis    { fill: none; stroke: var(--rule); stroke-width: 1; }
+.dg-shm .shm-ref     { fill: none; stroke: var(--ink); stroke-width: 1.3; stroke-dasharray: 4 3; opacity: .5; }
+.dg-shm .shm-spec    { fill: none; stroke: var(--blue); stroke-width: 2.4; stroke-linejoin: round; }
+.dg-shm .shm-area    { fill: var(--blue); fill-opacity: .14; }
+.dg-shm .shm-shift   { fill: none; stroke: var(--vermilion); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 
 /* ---------------------------------------------------- applied work */
 
