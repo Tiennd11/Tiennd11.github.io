@@ -653,33 +653,23 @@ dl.toolkit dd { margin: 0; font-size: .91rem; line-height: 1.52; color: var(--in
 
 .contact { border-bottom: 0; }
 
-.contact-in {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: clamp(2rem, 5vw, 4rem);
-  align-items: start;
-}
-
-/* the QR needs real contrast to scan, so it keeps its white plate
-   in dark mode too */
-.qr { margin: 0; text-align: center; }
+/* the QR is one more row of the contact list, not a floating block.
+   It keeps a white plate in dark mode because a scanner needs the
+   contrast, and the plate padding is what supplies the quiet zone. */
+.qr { margin: 0; }
 .qr-plate {
   background: #fff;
   border: 1px solid var(--rule);
   padding: 14px;
   line-height: 0;
+  width: max-content;
 }
-.qr-plate img { width: 168px; height: 168px; }
+.qr-plate img { width: 132px; height: 132px; }
 .qr figcaption {
-  margin-top: .7rem;
+  margin-top: .55rem;
   font-family: var(--mono);
   font-size: .72rem;
   color: var(--ink-3);
-}
-
-@media (max-width: 760px) {
-  .contact-in { grid-template-columns: 1fr; justify-items: start; }
-  .qr { text-align: left; }
 }
 
 .contactlist { list-style: none; margin: 0; padding: 0; max-width: 56ch; }
@@ -708,6 +698,9 @@ dl.toolkit dd { margin: 0; font-size: .91rem; line-height: 1.52; color: var(--in
 }
 .contactlist a:hover { color: var(--blue); }
 .contactlist em { font-style: normal; color: var(--ink-2); font-size: 1rem; }
+
+.contactlist .qr-row { align-items: start; padding-top: 1.1rem; }
+.contactlist .qr-row span { padding-top: .3rem; }
 
 /* ---------------------------------------------------------- footer */
 
