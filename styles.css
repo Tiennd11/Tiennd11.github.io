@@ -163,7 +163,7 @@ img { max-width: 100%; display: block; }
 
 .hero {
   position: relative;
-  padding-block: var(--s24) var(--s8);
+  padding-block: var(--s24) var(--s16);
   border-bottom: 1px solid var(--rule);
   overflow: hidden;
 }
@@ -238,15 +238,6 @@ h1 {
   object-position: 54% 32%;
   border: 1px solid var(--rule);
   background: var(--panel);
-}
-
-.plate-caption {
-  position: relative; z-index: 1;
-  margin-top: var(--s12);
-  font-family: var(--mono);
-  font-size: .75rem;
-  line-height: 1.6;
-  color: var(--ink-3);
 }
 
 /* ----------------------------------------------------------- bands */
@@ -809,7 +800,7 @@ footer {
 /* ------------------------------------------------------------ print */
 
 @media print {
-  .topbar, #field, .filters, .plate-caption, footer, .pubchart { display: none; }
+  .topbar, #field, .filters, footer, .pubchart { display: none; }
   body { background: #fff; color: #000; font-size: 10.5pt; }
   .band { border: 0; padding-block: var(--s6); }
   .pub { break-inside: avoid; }
