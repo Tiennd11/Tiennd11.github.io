@@ -8,6 +8,7 @@ Deployed with GitHub Pages.
 ```
 index.html     structure and all prose content
 styles.css     design tokens, layout, figure styling
+i18n.js        English/Vietnamese switch and the Vietnamese text
 pubs.js        publication data + journal/conference split + filtering
 diagrams.js    plays the research figures only while they are on screen
 field.js       hero canvas (plate-mode isolines, marching squares)
@@ -37,6 +38,15 @@ education → contact.
   at 375px, prints cleanly.
 
 ## Editing
+
+### Edit the Vietnamese text
+
+English lives in `index.html`. Every translatable element carries
+`data-i18n="key"`, and `i18n.js` holds the Vietnamese for that key in `VI`.
+To change a Vietnamese line, edit its entry in `VI`; to make a new element
+translatable, give it a `data-i18n` key and add that key to `VI`. Paper
+titles, venues and names stay in English. The visitor's choice is
+remembered in `localStorage`.
 
 ### Add a publication
 

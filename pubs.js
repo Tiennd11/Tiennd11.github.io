@@ -157,6 +157,10 @@ const PUBS = [
 (function () {
   "use strict";
 
+  const T = window.I18N;                          // may be absent; English then
+  const label = (k) => (T ? T.thread(k, THREADS[k].label) : THREADS[k].label);
+  const ui = (k) => (T ? T.ui(k) : { all: "All work" }[k]);
+
   const esc = (s) => s.replace(/[&<>"]/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -196,7 +200,7 @@ const PUBS = [
         : "";
 
       const chips = p.tags.map((k) =>
-        '<li style="--c:' + THREADS[k].color + '">' + esc(THREADS[k].label) + "</li>"
+        '<li data-k="' + k + '" style="--c:' + THREADS[k].color + '">' + esc(label(k)) + "</li>"
       ).join("");
 
       li.innerHTML =
@@ -245,11 +249,11 @@ const PUBS = [
   const used = Object.keys(THREADS).filter((k) =>
     PUBS.some((p) => p.tags.indexOf(k) > -1));
 
-  const mk = (key, label, color) => {
+  const mk = (key, text, color) => {
     const b = document.createElement("button");
     b.type = "button";
     b.className = "chip";
-    b.textContent = label;
+    b.textContent = text;
     b.setAttribute("aria-pressed", key === "all");
     if (color) b.style.setProperty("--c", color);
     b.addEventListener("click", () => {
@@ -262,15 +266,27 @@ const PUBS = [
     return b;
   };
 
-  filterBar.appendChild(mk("all", "All work", null));
-  used.forEach((k) => filterBar.appendChild(mk(k, THREADS[k].label, THREADS[k].color)));
+  filterBar.appendChild(mk("all", ui("all"), null));
+  used.forEach((k) => filterBar.appendChild(mk(k, label(k), THREADS[k].color)));
 
   apply();
 
   const n = PUBS.length;
   const nj = PUBS.filter((p) => p.type === "journal").length;
-  document.getElementById("pubcount").textContent =
-    n + " entries — " + nj + " journal articles and " + (n - nj) + " conference papers.";
+  const countText = () => (T ? T.ui("count")(n, nj, n - nj)
+    : n + " entries — " + nj + " journal articles and " + (n - nj) + " conference papers.");
+  document.getElementById("pubcount").textContent = countText();
+
+  /* relabel everything this script wrote when the language changes */
+  document.addEventListener("langchange", function () {
+    document.getElementById("pubcount").textContent = countText();
+    Array.prototype.forEach.call(filterBar.children, (b) => {
+      b.textContent = b.dataset.key === "all" ? ui("all") : label(b.dataset.key);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".ptags li[data-k]"), (li) => {
+      li.textContent = label(li.dataset.k);
+    });
+  });
 
   /* ---- output per year ------------------------------------------- */
   const chart = document.getElementById("pubchart");

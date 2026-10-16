@@ -6,11 +6,18 @@
   const links = document.getElementById("navlinks");
   if (!btn || !links) return;
 
+  const word = (k) => (window.I18N ? window.I18N.ui(k) : { menu: "Menu", close: "Close" }[k]);
+
   function set(open) {
     links.classList.toggle("open", open);
     btn.setAttribute("aria-expanded", String(open));
-    btn.textContent = open ? "Close" : "Menu";
+    btn.textContent = word(open ? "close" : "menu");
   }
+
+  btn.textContent = word("menu");
+  document.addEventListener("langchange", function () {
+    btn.textContent = word(btn.getAttribute("aria-expanded") === "true" ? "close" : "menu");
+  });
 
   btn.addEventListener("click", function () {
     set(btn.getAttribute("aria-expanded") !== "true");

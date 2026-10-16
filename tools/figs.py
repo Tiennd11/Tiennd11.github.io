@@ -457,13 +457,13 @@ _UNUSED = [
 
 def grid(cards):
     out = ['    <div class="interests grid-4">']
-    for fn, title, text in cards:
+    for n, (fn, title, text) in enumerate(cards, 1):
         out.append('      <article class="int card">')
         out.append('        <div class="dgwrap">')
         out.append("          " + fn())
         out.append("        </div>")
-        out.append("        <h3>%s</h3>" % title)
-        out.append("        <p>%s</p>" % text)
+        out.append('        <h3 data-i18n="ri.%d.t">%s</h3>' % (n, title))
+        out.append('        <p data-i18n="ri.%d.d">%s</p>' % (n, text))
         out.append("      </article>\n")
     out.append("    </div>")
     return "\n".join(out)
@@ -484,8 +484,8 @@ def group(heading, note, cards):
 
 frag = "\n".join([
     '    <div class="bandhead">',
-    '      <h2>Research interests</h2>',
-    '      <p class="section-lede">Eight threads, one aim: AI that engineers and scientists can',
+    '      <h2 data-i18n="research.h2">Research interests</h2>',
+    '      <p class="section-lede" data-i18n="research.lede">Eight threads, one aim: AI that engineers and scientists can',
     '      rely on — physics built into the model, uncertainty reported with every answer, and',
     '      agents that run the work themselves, applied to robots, materials, cameras and the',
     '      structures we need to keep standing.</p>',
