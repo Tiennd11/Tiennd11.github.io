@@ -449,6 +449,30 @@ h2 {
   50%      { transform: scaleY(1.12); }
 }
 
+/* ---------------------------------------------------- applied work */
+
+/* both cards share one shape — title, link, a two-line summary, then
+   five labelled rows — so their rows line up across the two columns */
+.work-item h3 { font-size: 1.3rem; margin-bottom: var(--s1); }
+.work-item .work-sum { min-height: calc(1.58em * 2); margin-bottom: var(--s6); }
+
+.work-rows { margin: 0; border-bottom: 1px solid var(--rule-2); }
+.work-rows > div {
+  display: grid;
+  grid-template-columns: 88px minmax(0, 1fr);
+  gap: var(--s4);
+  align-items: center;
+  min-height: var(--s12);
+  padding-block: var(--s2);
+  border-top: 1px solid var(--rule-2);
+}
+.work-rows dt {
+  font-family: var(--mono);
+  font-size: .75rem;
+  color: var(--ink-3);
+}
+.work-rows dd { margin: 0; font-size: .94rem; line-height: 1.45; color: var(--ink); }
+
 /* --------------------------------------------------------- toolkit */
 
 dl.toolkit { margin: 0; }
