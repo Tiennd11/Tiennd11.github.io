@@ -145,32 +145,84 @@ def fig_cv():
 
 # --------------------------------------------------------------- 4. PINN
 def fig_pinn():
-    n = 9
-    xs = [16 + i * (188 / (n - 1)) for i in range(n)]
-    ys = [96, 66, 50, 60, 86, 104, 94, 68, 46]
-    # Catmull-Rom through the points, written as cubic Beziers
-    d = "M%.1f,%d" % (xs[0], ys[0])
-    for i in range(n - 1):
-        p0 = (xs[max(i - 1, 0)], ys[max(i - 1, 0)])
-        p1, p2 = (xs[i], ys[i]), (xs[i + 1], ys[i + 1])
-        p3 = (xs[min(i + 2, n - 1)], ys[min(i + 2, n - 1)])
-        c1 = (p1[0] + (p2[0] - p0[0]) / 6.0, p1[1] + (p2[1] - p0[1]) / 6.0)
-        c2 = (p2[0] - (p3[0] - p1[0]) / 6.0, p2[1] - (p3[1] - p1[1]) / 6.0)
-        d += " C%.1f,%.1f %.1f,%.1f %.1f,%d" % (c1[0], c1[1], c2[0], c2[1], p2[0], p2[1])
-    hs = [26, 34, 22, 30, 20, 16, 24, 30, 36]
-    bars = "".join(
-        '<rect x="%.0f" y="%d" width="3.4" height="%d" style="--i:%d"/>' % (xs[i] - 1.7, ys[i], hs[i], i)
-        for i in range(n)
-    )
-    dots = "".join('<circle cx="%.0f" cy="%d" r="3.4"/>' % (xs[i], ys[i]) for i in range(n))
+    """A PINN training run, start to finish.
+
+    The network's prediction (solid) starts far from the exact solution
+    (dashed) and converges onto it; the error area between them shrinks
+    to nothing, the collocation points ride the prediction, and the
+    residual strip underneath collapses in step. All of it is one SMIL
+    timeline, so it pauses and resumes together.
+    """
+    X0, X1 = 16.0, 204.0          # plot span
+    MID, AMP = 56.0, 34.0         # u(x) axis
+    STRIP = 128.0                 # residual strip baseline
+    N = 48                        # samples along the curves
+    NC = 11                       # collocation points
+    DUR = "7s"
+
+    def exact(s):
+        return 0.82 * math.sin(2 * math.pi * s) + 0.22 * math.sin(5 * math.pi * s)
+
+    def guess(s):                 # an untrained network: nearly flat, wrong
+        return 0.18 * math.sin(math.pi * s) - 0.28
+
+    K = 18                        # keyframes in the converging phase
+    # ease in and out, so the wrong start and the converged end both read
+    ws = [0.5 - 0.5 * math.cos(math.pi * k / (K - 1)) for k in range(K)]
+
+    def pred(s, w):
+        return guess(s) * (1 - w) + exact(s) * w
+
+    X = lambda s: X0 + (X1 - X0) * s
+    Y = lambda u: MID - AMP * u
+    ss = [i / (N - 1) for i in range(N)]
+    fmt = lambda pts: " ".join("%.1f,%.1f" % p for p in pts)
+
+    exact_pts = [(X(s), Y(exact(s))) for s in ss]
+    pred_frames = [[(X(s), Y(pred(s, w))) for s in ss] for w in ws]
+    err_frames = [fmt(f + exact_pts[::-1]) for f in pred_frames]
+
+    # timeline: hold the untrained guess, converge over 0.10..0.72,
+    # hold the solution, fade out, restart
+    conv = [0.10 + 0.62 * k / (K - 1) for k in range(K)]
+    kt = [0.0] + conv + [0.9, 1.0]
+    def track(frames):
+        return ";".join([frames[0]] + frames + [frames[-1], frames[-1]])
+    keytimes = ";".join("%.4f" % t for t in kt)
+
+    def anim(attr, frames):
+        return ('<animate attributeName="%s" dur="%s" repeatCount="indefinite"'
+                ' calcMode="linear" keyTimes="%s" values="%s"/>'
+                % (attr, DUR, keytimes, track(frames)))
+
+    cs = [0.04 + 0.92 * i / (NC - 1) for i in range(NC)]
+    dots, bars = "", ""
+    for s in cs:
+        cy = ["%.1f" % Y(pred(s, w)) for w in ws]
+        r = [abs(pred(s, w) - exact(s)) for w in ws]
+        h = ["%.1f" % max(0.8, 20 * v) for v in r]
+        y = ["%.1f" % (STRIP - max(0.8, 20 * v)) for v in r]
+        dots += ('<circle class="pinn-dot" cx="%.1f" cy="%s" r="3.2">%s</circle>'
+                 % (X(s), cy[0], anim("cy", cy)))
+        bars += ('<rect class="pinn-bar" x="%.1f" y="%s" width="5" height="%s">%s%s</rect>'
+                 % (X(s) - 2.5, y[0], h[0], anim("y", y), anim("height", h)))
+
+    fade = ('<animate attributeName="opacity" dur="%s" repeatCount="indefinite"'
+            ' keyTimes="0;0.02;0.88;0.96;1" values="0;1;1;0;0"/>' % DUR)
+
     body = (
         plate()
-        + '<path class="dg-tint" d="%s L204,124 L16,124 Z"/>' % d
-        + '<path class="dg-ink2" d="%s"/>' % d
-        + '<g class="bars">' + bars + "</g>"
-        + '<g class="dots">' + dots + "</g>"
+        + '<path class="pinn-axis" d="M%g %gH%g"/>' % (X0, MID, X1)
+        + '<path class="pinn-axis" d="M%g %gH%g"/>' % (X0, STRIP, X1)
+        + '<polyline class="pinn-exact" points="%s"/>' % fmt(exact_pts)
+        + '<g class="pinn-run">' + fade
+        + '<polygon class="pinn-err" points="%s">%s</polygon>' % (err_frames[0], anim("points", err_frames))
+        + '<polyline class="pinn-pred" points="%s">%s</polyline>'
+          % (fmt(pred_frames[0]), anim("points", [fmt(f) for f in pred_frames]))
+        + dots + bars
+        + "</g>"
     )
-    return svg("dg-pinn", "Residuals at collocation points collapsing onto a PDE solution curve", body)
+    return svg("dg-pinn", "A physics-informed network converging onto the exact solution while its residuals shrink to zero", body)
 
 # ---------------------------------------------------------------- 5. arm
 def two_link(px, py, qx, qy, a, b, up=True):
@@ -400,7 +452,7 @@ _UNUSED = [
 ]
 
 def grid(cards):
-    out = ['    <div class="interests grid-2">']
+    out = ['    <div class="interests grid-4">']
     for fn, title, text in cards:
         out.append('      <article class="int card">')
         out.append('        <div class="dgwrap">')

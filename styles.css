@@ -309,22 +309,6 @@ h2 {
 .dgwrap { margin-bottom: var(--s4); }
 .dg { display: block; width: 100%; height: auto; }
 
-/* two columns of four: each card lies flat, figure left and text
-   right, so the figures stay a calm size instead of filling a half-page */
-@media (min-width: 768px) {
-  .interests .int {
-    display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-    grid-template-rows: auto 1fr;
-    grid-template-areas: "fig title" "fig text";
-    gap: var(--s2) var(--s6);
-    align-items: start;
-  }
-  .interests .dgwrap { grid-area: fig; margin: 0; }
-  .interests .int h3 { grid-area: title; margin: 0; }
-  .interests .int p  { grid-area: text; }
-}
-
 /* shared figure ink -------------------------------------------- */
 .dg { color: var(--ink); }                 /* resolves currentColor in defs */
 .dg-plate  { fill: var(--panel); stroke: var(--rule-2); stroke-width: 1; }
@@ -378,21 +362,16 @@ h2 {
 }
 @keyframes lock { 0% { opacity: 1; } 33.3%, 100% { opacity: 0; } }
 
-/* PINN: residuals at the collocation points collapse ------------ */
-.dg-pinn .bars rect {
-  fill: var(--vermilion); stroke: none;
-  transform-box: fill-box; transform-origin: 50% 0;
-}
-.dg-pinn .dots circle { fill: var(--blue); stroke: var(--panel); stroke-width: 1.6; }
-.run .dg-pinn .bars rect {
-  animation: resid 4.8s ease-in-out infinite;
-  animation-delay: calc(var(--i) * 0.08s);
-}
-@keyframes resid {
-  0%       { transform: scaleY(1); }
-  50%, 76% { transform: scaleY(0.04); }
-  100%     { transform: scaleY(1); }
-}
+/* PINN: the prediction converges on the exact solution --------- */
+/* SMIL drives every moving part on one timeline; style only here */
+.dg-pinn .pinn-axis  { fill: none; stroke: var(--rule); stroke-width: 1; }
+.dg-pinn .pinn-exact { fill: none; stroke: var(--ink); stroke-width: 1.6;
+                       stroke-dasharray: 4 3; stroke-linecap: round; }
+.dg-pinn .pinn-err   { fill: var(--vermilion); fill-opacity: .16; stroke: none; }
+.dg-pinn .pinn-pred  { fill: none; stroke: var(--blue); stroke-width: 2.6;
+                       stroke-linejoin: round; stroke-linecap: round; }
+.dg-pinn .pinn-dot   { fill: var(--blue); stroke: var(--panel); stroke-width: 1.6; }
+.dg-pinn .pinn-bar   { fill: var(--vermilion); }
 
 /* arm: SMIL rotates each link about its own joint; style only --- */
 .dg-arm .dg-ghostline {
