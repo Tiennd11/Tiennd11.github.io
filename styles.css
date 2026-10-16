@@ -743,7 +743,7 @@ footer {
    768–1279px — four-up grids halve, everything else keeps its form */
 
 @media (max-width: 1279.98px) {
-  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-4 { gap: 0 var(--s6); }   /* stays 4-up; a tighter gutter keeps the cards readable */
   .grid-3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-in { gap: var(--s12); }
 }

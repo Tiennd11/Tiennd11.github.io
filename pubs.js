@@ -63,6 +63,11 @@ const PUBS = [
     a: "*D. T. Nguyen*, V. T. T. Nguyen, T. Do, V. L. Nguyen",
     v: "IFToMM International Symposium on Robotics and Mechatronics" },
 
+  { y: 2026, type: "journal", tags: ["fracture"],
+    t: "Scalable Phase-field Implementation of Crack Evolution (SPICE) for Modeling Surface Crevasse Growth and Interaction in Glaciers",
+    a: "A. Gupta, *D. T. Nguyen*, R. Duddu, M. Ranganathan, A. Robel",
+    v: "Journal of Advances in Modeling Earth Systems" },
+
   /* ---------------------------------- 2025 */
   { y: 2025, type: "journal", tags: ["structdyn", "uq"],
     t: "Stochastic nonlinear dynamic investigation of laminated nanocomposite non-rectangular plates under random loading",
