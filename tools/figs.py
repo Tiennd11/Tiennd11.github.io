@@ -399,6 +399,19 @@ _UNUSED = [
      "itself changes across the input space, not just the prediction."),
 ]
 
+def grid(cards):
+    out = ['    <div class="interests grid-4">']
+    for fn, title, text in cards:
+        out.append('      <article class="int card">')
+        out.append('        <div class="dgwrap">')
+        out.append("          " + fn())
+        out.append("        </div>")
+        out.append("        <h3>%s</h3>" % title)
+        out.append("        <p>%s</p>" % text)
+        out.append("      </article>\n")
+    out.append("    </div>")
+    return "\n".join(out)
+
 def group(heading, note, cards):
     out = ['    <h3 class="sub">%s <span class="subnote">%s</span></h3>' % (heading, note)]
     out.append('    <div class="interests">')
@@ -414,12 +427,13 @@ def group(heading, note, cards):
     return "\n".join(out)
 
 frag = "\n".join([
-    "    <h2>Research interests</h2>",
-    '    <p class="section-lede">One question runs through all of it: how do you put physics',
-    "    inside a learning system so that it generalises, converges, and can be trusted on",
-    "    problems where data is expensive and the governing equations are already known?</p>\n",
-    group("Learning methods", "how the model is built", METHODS),
-    group("Perception and systems", "what it is pointed at", APPLIED),
+    '    <div class="bandhead">',
+    '      <h2>Research interests</h2>',
+    '      <p class="section-lede">One question runs through all of it: how do you put physics',
+    '      inside a learning system so that it generalises, converges, and can be trusted on',
+    '      problems where data is expensive and the governing equations are already known?</p>',
+    '    </div>\n',
+    grid(METHODS + APPLIED),
 ])
 
 with open("interests.html", "w", encoding="utf-8") as f:

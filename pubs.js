@@ -266,4 +266,29 @@ const PUBS = [
   const nj = PUBS.filter((p) => p.type === "journal").length;
   document.getElementById("pubcount").textContent =
     n + " entries — " + nj + " journal articles and " + (n - nj) + " conference papers.";
+
+  /* ---- output per year ------------------------------------------- */
+  const chart = document.getElementById("pubchart");
+  if (chart) {
+    const years = PUBS.map((p) => p.y);
+    const lo = Math.min.apply(null, years);
+    const hi = Math.max.apply(null, years);
+    const count = {};
+    PUBS.forEach((p) => { count[p.y] = (count[p.y] || 0) + 1; });
+
+    let peak = 1;
+    for (let y = lo; y <= hi; y++) peak = Math.max(peak, count[y] || 0);
+
+    let rows = "";
+    for (let y = hi; y >= lo; y--) {
+      const c = count[y] || 0;
+      rows +=
+        '<div class="prow">' +
+          '<span class="pyr">' + y + "</span>" +
+          '<span class="pbar"><i style="width:' + (c / peak * 100) + '%"></i></span>' +
+          '<span class="pn">' + (c || "") + "</span>" +
+        "</div>";
+    }
+    chart.innerHTML = rows;
+  }
 })();
