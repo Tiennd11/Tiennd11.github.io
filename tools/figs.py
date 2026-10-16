@@ -485,9 +485,10 @@ def group(heading, note, cards):
 frag = "\n".join([
     '    <div class="bandhead">',
     '      <h2>Research interests</h2>',
-    '      <p class="section-lede">One question runs through all of it: how do you put physics',
-    '      inside a learning system so that it generalises, converges, and can be trusted on',
-    '      problems where data is expensive and the governing equations are already known?</p>',
+    '      <p class="section-lede">Eight threads, one aim: AI that engineers and scientists can',
+    '      rely on — physics built into the model, uncertainty reported with every answer, and',
+    '      agents that run the work themselves, applied to robots, materials, cameras and the',
+    '      structures we need to keep standing.</p>',
     '    </div>\n',
     grid(METHODS + APPLIED),
 ])
