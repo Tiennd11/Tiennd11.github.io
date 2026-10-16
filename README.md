@@ -1,4 +1,4 @@
-# Personal site — Duc Tien Nguyen
+# Personal site — Tien Nguyen
 
 Static personal and academic site. No build step, no dependencies, no trackers.
 Deployed with GitHub Pages.
