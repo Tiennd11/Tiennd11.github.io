@@ -309,6 +309,22 @@ h2 {
 .dgwrap { margin-bottom: var(--s4); }
 .dg { display: block; width: 100%; height: auto; }
 
+/* two columns of four: each card lies flat, figure left and text
+   right, so the figures stay a calm size instead of filling a half-page */
+@media (min-width: 768px) {
+  .interests .int {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas: "fig title" "fig text";
+    gap: var(--s2) var(--s6);
+    align-items: start;
+  }
+  .interests .dgwrap { grid-area: fig; margin: 0; }
+  .interests .int h3 { grid-area: title; margin: 0; }
+  .interests .int p  { grid-area: text; }
+}
+
 /* shared figure ink -------------------------------------------- */
 .dg { color: var(--ink); }                 /* resolves currentColor in defs */
 .dg-plate  { fill: var(--panel); stroke: var(--rule-2); stroke-width: 1; }

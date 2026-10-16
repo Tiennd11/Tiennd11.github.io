@@ -400,7 +400,7 @@ _UNUSED = [
 ]
 
 def grid(cards):
-    out = ['    <div class="interests grid-4">']
+    out = ['    <div class="interests grid-2">']
     for fn, title, text in cards:
         out.append('      <article class="int card">')
         out.append('        <div class="dgwrap">')
